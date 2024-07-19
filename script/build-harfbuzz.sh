@@ -44,17 +44,33 @@ checkStatus $? "download failed"
 # unpack
 tar -xf "harfbuzz.tar.xz"
 checkStatus $? "unpack failed"
-cd "harfbuzz-$VERSION/"
-checkStatus $? "change directory failed"
+
+# prepare python3 virtual environment
+python3 -m virtualenv .venv
+if [ $? -ne 0 ]; then
+    echo "python create virtual environment failed"
+
+    # check, if meson is natively available
+    MESON_VERSION=$(meson -v 2> /dev/null)
+    checkStatus $? "meson was also not found: please install python correctly with virtualenv"
+    echo "using meson $MESON_VERSION"
+else
+    . .venv/bin/activate
+    checkStatus $? "python activate virtual environment failed"
+    pip install meson
+    checkStatus $? "python meson installation failed"
+fi
 
 # prepare build
-./configure --prefix="$TOOL_DIR" --enable-shared=no --enable-static=yes
+cd "harfbuzz-$VERSION/"
+checkStatus $? "change directory failed"
+meson build --prefix "$TOOL_DIR" --libdir=lib --default-library=static
 checkStatus $? "configuration failed"
 
 # build
-make -j $CPUS
+ninja -v -j $CPUS -C build
 checkStatus $? "build failed"
 
 # install
-make install
+ninja -v -C build install
 checkStatus $? "installation failed"
