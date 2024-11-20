@@ -47,6 +47,18 @@ checkStatus $? "unpack failed"
 cd "libvorbis-$VERSION/"
 checkStatus $? "change directory failed"
 
+# manual dirty patch to remove wrong flag
+string_to_remove=" -force_cpusubtype_ALL"
+
+# Find all Makefile and configure.ac files recursively
+find . -type f \( -name "Makefile" -o -name "configure*" -o -name "libtool" -o -name "status" \) | while read file; do 
+	# replace in place without backup
+    sed -i '' "s/$string_to_remove//g" "$file"
+    echo "Updated $file"
+done
+echo "Patched libvorbis configure and makefiles"
+
+
 # prepare build
 ./configure --prefix="$TOOL_DIR" --enable-shared=no
 checkStatus $? "configuration failed"

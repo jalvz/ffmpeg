@@ -40,22 +40,22 @@ echo "version: $VERSION"
 # start in working directory
 cd "$SOURCE_DIR"
 checkStatus $? "change directory failed"
-mkdir "ffmpeg"
-checkStatus $? "create directory failed"
+#mkdir "ffmpeg"
+#checkStatus $? "create directory failed"
 cd "ffmpeg/"
 checkStatus $? "change directory failed"
 
 # download ffmpeg source
-download https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.bz2 "ffmpeg.tar.bz2"
-checkStatus $? "ffmpeg download failed"
+#download https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.bz2 "ffmpeg.tar.bz2"
+#checkStatus $? "ffmpeg download failed"
 
 # unpack ffmpeg
-mkdir "ffmpeg"
-checkStatus $? "create directory failed"
-bunzip2 "ffmpeg.tar.bz2"
-checkStatus $? "unpack failed (bunzip2)"
-tar -xf ffmpeg.tar -C ffmpeg --strip-components=1
-checkStatus $? "unpack failed (tar)"
+#mkdir "ffmpeg"
+#checkStatus $? "create directory failed"
+#bunzip2 "ffmpeg.tar.bz2"
+#checkStatus $? "unpack failed (bunzip2)"
+#tar -xf ffmpeg.tar -C ffmpeg --strip-components=1
+#checkStatus $? "unpack failed (tar)"
 cd "ffmpeg/"
 checkStatus $? "change directory failed"
 
